@@ -7,16 +7,22 @@ interface HeaderProps {
 
 function Header(props: HeaderProps) {
   const { title, logo } = props;
+
   return (
     <nav className="navbar navbar-dark bg-dark">
       <div className="container">
         <a className="navbar-brand mr-4" href="/">
           {title}
         </a>
-        <ul className="navbar-nav">
-          <li className="nav-item">
+        <ul className="navbar-nav" style={{display:"flex", flexDirection: "row"}}>
+          <li className="nav-item" style={{marginRight: 10}}>
             <a className="nav-link" href="/orders">
               Order List
+            </a>
+          </li>
+          <li className="nav-item">
+            <a className="nav-link" href="/login" onClick={() => {localStorage.removeItem('token');}}>
+              Logout
             </a>
           </li>
         </ul>

@@ -1,7 +1,9 @@
 import { get, post } from '../api/index';
 import CONFIG from '../config/config';
 import { Response } from 'express';
+const token = localStorage.getItem("token");
 
+const Authorization = `Bearer ${token}`
 type ResponseBody = {
   data: [];
 };
@@ -19,7 +21,7 @@ export async function getBooks(page: number, limit: number): Promise<ResponseBod
 }
 
 export async function getOrders(page: number, limit: number): Promise<ResponseBody> {
-  let res = await get<ResponseBody>(`${CONFIG.API}orders?limit=${limit}&page=${page}`, {headers: {Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjQsImlhdCI6MTcwNzQ4NTk1OSwiZXhwIjoxNzA3NDg5NTU5fQ.3zP7QNfU0ct7N5G0NNJoq6NA3-pWHuDu3xZGrZzCbfo"}});
+  let res = await get<ResponseBody>(`${CONFIG.API}orders?limit=${limit}&page=${page}`, {headers: {Authorization}});
   console.log(res);
   return res;
 }
