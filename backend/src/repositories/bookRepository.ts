@@ -1,19 +1,11 @@
-import { BaseRepository } from "./base/BaseRepository";
-import { Query, Document, Model } from "mongoose";
-// now, we have all code implementation from BaseRepository
-export class BookRepository extends BaseRepository<Model<Document>> {
-  // here, we can create all especific stuffs of Book Repository
-  async countOfBooks(): Query<number> {
-    return this.model.count({});
-  }
+import { pool } from "../db/pool";
+import { BookEntity } from "../entities/bookEntity";
 
-  async find(query: Object, page: number, limit: number): Promise<Document[]> {
-    return await this.model
-      .find(query)
-      .limit(limit)
-      .skip(limit * (page - 1))
-      .sort({
-        name: "asc",
-      });
-  }
-}
+export const bookRepository = {
+  getAllBooks: async (page: number = 1, pageSize: number = 10): Promise<BookEntity[]> => {
+    const offset = (page - 1) * pageSize;
+    const result = await pool.query("SELECT * FROM books ORDER BY id OFFSET $1 LIMIT $2", [offset, pageSize]);
+    return result.rows;
+  },
+  // Add other book-related queries here
+};

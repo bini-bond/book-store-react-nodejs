@@ -18,6 +18,6 @@
     },
     "typeRoots": ["./src/@types", "./node_modules/@types"]
   },
-  "include": ["./src/**/*.ts"],
+  "include": ["./src/**/*.ts", "src/repositories/.orderRepository.ts"],
   "exclude": ["node_modules", "**/*.spec.ts", "typings"]
 }

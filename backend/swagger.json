@@ -1,171 +1,184 @@
 {
   "swagger": "2.0",
   "info": {
-    "version": "1.0",
-    "title": "bookstore",
-    "contact": {}
+    "version": "1.0.0",
+    "title": "Bookstore API",
+    "description": "API documentation for the bookstore backend"
   },
-  "host": "localhost:3000",
-  "basePath": "/",
-  "securityDefinitions": {},
-  "schemes": [
-    "http"
-  ],
-  "consumes": [
-    "application/json"
-  ],
-  "produces": [
-    "application/json"
-  ],
   "paths": {
-    "/purchase": {
+    "/register": {
       "post": {
-        "summary": "http://localhost:3000/purchase",
-        "tags": [
-          "Misc"
-        ],
-        "operationId": "http://localhost:3000/purchase",
-        "deprecated": false,
-        "produces": [
-          "application/json"
-        ],
+        "summary": "Register a new user",
         "parameters": [
           {
-            "name": "Body",
+            "name": "username",
             "in": "body",
             "required": true,
-            "description": "",
-            "schema": {
-              "$ref": "#/definitions/http%3A~1~1localhost%3A3000~1purchaserequest"
-            }
+            "type": "string"
+          },
+          {
+            "name": "password",
+            "in": "body",
+            "required": true,
+            "type": "string"
           }
         ],
         "responses": {
-          "200": {
-            "description": "",
-            "headers": {}
+          "201": {
+            "description": "User registered successfully",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }
     },
-    "/": {
+    "/login": {
       "post": {
-        "summary": "http://localhost:3000/",
-        "tags": [
-          "Misc"
-        ],
-        "operationId": "http://localhost:3000/",
-        "deprecated": false,
-        "produces": [
-          "application/json"
-        ],
+        "summary": "Login as a user",
         "parameters": [
           {
-            "name": "Body",
+            "name": "username",
             "in": "body",
             "required": true,
-            "description": "",
-            "schema": {
-              "$ref": "#/definitions/http%3A~1~1localhost%3A3000~1request"
-            }
+            "type": "string"
+          },
+          {
+            "name": "password",
+            "in": "body",
+            "required": true,
+            "type": "string"
           }
         ],
         "responses": {
           "200": {
-            "description": "",
-            "headers": {}
+            "description": "Login successful",
+            "schema": {
+              "$ref": "#/definitions/LoginResponse"
+            }
+          },
+          "401": {
+            "description": "Invalid credentials"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
-      },
-      "get": {
-        "summary": "http://localhost:3000/",
-        "tags": [
-          "Misc"
+      }
+    },
+    "/order": {
+      "post": {
+        "summary": "Order a book",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "body",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "bookId",
+            "in": "body",
+            "required": true,
+            "type": "integer"
+          }
         ],
-        "operationId": "Gethttp://localhost:3000/",
-        "deprecated": false,
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [],
         "responses": {
           "200": {
-            "description": "",
-            "headers": {}
+            "description": "Successful order",
+            "schema": {
+              "$ref": "#/definitions/Order"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/cancel-order/{orderId}": {
+      "delete": {
+        "summary": "Cancel an order",
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Order canceled successfully"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/orders": {
+      "get": {
+        "summary": "Get the list of bought books",
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "schema": {
+              "$ref": "#/definitions/OrderList"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }
     }
   },
   "definitions": {
-    "http://localhost:3000/purchaserequest": {
-      "title": "http://localhost:3000/purchaserequest",
-      "example": {
-        "bookId": "64cba756f09a9240e644cea8",
-        "user": "Nahom Brhanmeskel",
-        "price": 200
-      },
+    "User": {
       "type": "object",
       "properties": {
-        "bookId": {
-          "type": "string"
+        "id": {
+          "type": "integer"
         },
-        "user": {
+        "username": {
           "type": "string"
-        },
-        "price": {
-          "type": "integer",
-          "format": "int32"
         }
-      },
-      "required": [
-        "bookId",
-        "user",
-        "price"
-      ]
+      }
     },
-    "http://localhost:3000/request": {
-      "title": "http://localhost:3000/request",
-      "example": {
-        "title": "Last Hope",
-        "desc": "desc",
-        "discountRate": 10,
-        "price": 200,
-        "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQWyMXgN6ROv09a-iSFI6ej9v2h9xAnuFyZYAYoqXEg&s"
-      },
+    "LoginResponse": {
       "type": "object",
       "properties": {
-        "title": {
-          "type": "string"
+        "user": {
+          "$ref": "#/definitions/User"
         },
-        "desc": {
-          "type": "string"
-        },
-        "discountRate": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "price": {
-          "type": "integer",
-          "format": "int32"
-        },
-        "image": {
+        "token": {
           "type": "string"
         }
-      },
-      "required": [
-        "title",
-        "desc",
-        "discountRate",
-        "price",
-        "image"
-      ]
+      }
+    },
+    "Order": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "user_id": {
+          "type": "integer"
+        },
+        "book_id": {
+          "type": "integer"
+        }
+      }
+    },
+    "OrderList": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Order"
+      }
     }
-  },
-  "tags": [
-    {
-      "name": "Misc",
-      "description": ""
-    }
-  ]
+  }
 }
